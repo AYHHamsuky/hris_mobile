@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/theme.dart';
+import '../../core/notifications/push_service.dart';
+import '../inspections/inspection_drafts.dart';
 import 'auth_repository.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -30,6 +34,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           _identifier.text.trim(),
           _password.text,
         );
+    final user = ref.read(authControllerProvider).user;
+    if (user != null) {
+      // Best-effort post-login setup: register push token and sync any
+      // offline inspection drafts the user accumulated before signing in.
+      unawaited(ref.read(pushServiceProvider).init());
+      unawaited(ref.read(inspectionDraftStoreProvider).syncAll());
+    }
   }
 
   @override

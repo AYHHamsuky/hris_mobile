@@ -37,6 +37,13 @@ dependencies:
   # Auth helpers
   local_auth: ^2.3.0
 
+  # Push notifications
+  firebase_core: ^3.8.1
+  firebase_messaging: ^15.1.6
+
+  # Connectivity check for offline draft sync
+  connectivity_plus: ^6.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

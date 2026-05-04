@@ -15,7 +15,10 @@ Flutter app (iOS + Android) that talks to the Laravel HRIS backend at
 | Leave: balances + applications + apply form | ✅ |
 | Field Inspections: GPS, OSM map, camera/gallery/files, weather, progress | ✅ |
 | Profile + sign out + change password | ✅ |
-| Push notifications (FCM) | ⏳ next iteration |
+| Push notifications (FCM) | ✅ scaffolded — needs Firebase config |
+| Offline draft cache for inspections | ✅ shared_preferences-backed, auto-syncs |
+| Line manager Team Leave queue + LM approve/reject | ✅ |
+| Biometric unlock at app start | ✅ |
 
 ## Architecture
 
@@ -98,10 +101,25 @@ in the HRIS repo.
 
 All declared in `android/app/src/main/AndroidManifest.xml` and `ios/Runner/Info.plist`.
 
+## Push notification setup
+
+The app is wired for FCM but needs your Firebase project to actually deliver
+notifications:
+
+1. Create a Firebase project (or use the existing Kaduna Electric one).
+2. Add an Android app: package name `cloud.kadunaelectric.hris_mobile`.
+   Download `google-services.json` → drop it in `android/app/`.
+3. Add an iOS app: bundle id matches the iOS target; download
+   `GoogleService-Info.plist` → drag it into `ios/Runner/` from Xcode.
+4. On the Laravel side, set `FCM_SERVER_KEY` in `.env` to the Cloud Messaging
+   Server Key (Project Settings → Cloud Messaging → Server key, Legacy API).
+
+If `FCM_SERVER_KEY` is unset on the backend or the config files are missing
+on the client, the app falls back to silent no-ops — nothing else breaks.
+
 ## Roadmap
 
-- FCM push notifications
-- Offline draft cache for inspections (Hive)
-- Biometric unlock on app start
-- Line manager team-leave queue
-- Push notifications deep-link into a specific task / leave application
+- App icons + splash screen with brand assets
+- Signed Android release + iOS TestFlight build
+- Project detail screen with inline tasks
+- Subtask tree on the Task detail page

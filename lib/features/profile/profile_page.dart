@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/auth/biometric_service.dart';
+import '../../core/notifications/push_service.dart';
 import '../auth/auth_repository.dart';
+
+final _biometricEnabledProvider = FutureProvider<bool>((ref) async {
+  return ref.read(biometricServiceProvider).isEnabled();
+});
 
 class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
@@ -10,6 +16,7 @@ class ProfilePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(authControllerProvider).user;
+    final biometricEnabled = ref.watch(_biometricEnabledProvider);
     if (user == null) return const Scaffold(body: Center(child: CircularProgressIndicator()));
 
     return Scaffold(
@@ -47,10 +54,40 @@ class ProfilePage extends ConsumerWidget {
           ),
           const SizedBox(height: 8),
           Card(
+            child: SwitchListTile(
+              secondary: const Icon(Icons.fingerprint),
+              title: const Text('Biometric unlock'),
+              subtitle: const Text('Use fingerprint or Face ID to open the app'),
+              value: biometricEnabled.maybeWhen(data: (v) => v, orElse: () => false),
+              onChanged: (v) async {
+                final svc = ref.read(biometricServiceProvider);
+                if (v) {
+                  if (!await svc.supported) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Biometrics not available on this device.'),
+                      ));
+                    }
+                    return;
+                  }
+                  final ok = await svc.authenticate(reason: 'Confirm to enable biometric unlock');
+                  if (!ok) return;
+                  await svc.setEnabled(true);
+                } else {
+                  await svc.setEnabled(false);
+                }
+                ref.invalidate(_biometricEnabledProvider);
+              },
+            ),
+          ),
+          const SizedBox(height: 8),
+          Card(
             child: ListTile(
               leading: const Icon(Icons.logout, color: Colors.red),
               title: const Text('Sign Out', style: TextStyle(color: Colors.red)),
               onTap: () async {
+                // Best-effort: tell the server to forget this device's FCM token.
+                await ref.read(pushServiceProvider).deregister();
                 await ref.read(authControllerProvider.notifier).logout();
                 if (context.mounted) context.go('/login');
               },

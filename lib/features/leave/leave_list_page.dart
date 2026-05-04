@@ -18,6 +18,11 @@ class LeaveListPage extends ConsumerWidget {
         title: const Text('Leave'),
         actions: [
           IconButton(
+            tooltip: 'Team requests',
+            icon: const Icon(Icons.group_outlined),
+            onPressed: () => context.push('/leave/team'),
+          ),
+          IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () {
               ref.invalidate(leaveBalancesProvider);

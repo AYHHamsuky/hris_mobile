@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../core/api/api_client.dart';
+import 'inspection_drafts.dart';
 import 'inspection_models.dart';
 import 'inspection_repository.dart';
 
@@ -117,10 +118,36 @@ class _InspectionFormPageState extends ConsumerState<InspectionFormPage> {
         Navigator.of(context).pop();
       }
     } catch (e) {
+      // Save the draft locally so it auto-syncs when online.
+      await _saveAsDraft();
+      ref.invalidate(inspectionDraftsProvider);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Saved as draft — we'll upload when you're back online."),
+        ));
+        Navigator.of(context).pop();
+      }
       setState(() => _error = ApiClient.describeError(e));
     } finally {
       if (mounted) setState(() => _saving = false);
     }
+  }
+
+  Future<void> _saveAsDraft() async {
+    final draft = InspectionDraft(
+      id: 'draft_${DateTime.now().microsecondsSinceEpoch}',
+      projectId: _project!.id,
+      createdAt: DateTime.now(),
+      latitude: _position?.latitude,
+      longitude: _position?.longitude,
+      accuracyM: _position?.accuracy,
+      locationName: _location.text.trim().isEmpty ? null : _location.text.trim(),
+      weather: _weather.isEmpty ? null : _weather,
+      progressObserved: _progress > 0 ? _progress : null,
+      notes: _notes.text.trim().isEmpty ? null : _notes.text.trim(),
+      mediaPaths: _files.map((f) => f.path).toList(),
+    );
+    await ref.read(inspectionDraftStoreProvider).add(draft);
   }
 
   @override

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "879145724794",
+    "project_id": "nwdc-erp-mobile",
+    "storage_bucket": "nwdc-erp-mobile.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:879145724794:android:8ffa4af7f1603c8f6584c3",
+        "android_client_info": {
+          "package_name": "gov.ng.nwdc.nwdc_erp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSdJBmn3RunG0L5ZPbtWRW0mqWl1LU89s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

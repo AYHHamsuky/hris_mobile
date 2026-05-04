@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../features/auth/auth_repository.dart';
+import '../features/auth/biometric_gate.dart';
 import '../features/auth/change_password_page.dart';
 import '../features/auth/login_page.dart';
 import '../features/dashboard/dashboard_page.dart';
@@ -10,6 +11,7 @@ import '../features/inspections/inspection_form_page.dart';
 import '../features/inspections/inspections_list_page.dart';
 import '../features/leave/leave_apply_page.dart';
 import '../features/leave/leave_list_page.dart';
+import '../features/leave/team_leave_page.dart';
 import '../features/profile/profile_page.dart';
 import '../features/projects/projects_list_page.dart';
 import '../features/tasks/task_detail_page.dart';
@@ -39,7 +41,7 @@ GoRouter buildRouter(WidgetRef ref) {
         builder: (_, state) => ChangePasswordPage(firstLogin: state.uri.queryParameters['first'] == '1'),
       ),
       ShellRoute(
-        builder: (context, state, child) => MainShell(location: state.uri.path, child: child),
+        builder: (context, state, child) => BiometricGate(child: MainShell(location: state.uri.path, child: child)),
         routes: [
           GoRoute(path: '/dashboard', builder: (_, __) => const DashboardPage()),
           GoRoute(
@@ -61,6 +63,7 @@ GoRouter buildRouter(WidgetRef ref) {
             builder: (_, __) => const LeaveListPage(),
             routes: [
               GoRoute(path: 'apply', builder: (_, __) => const LeaveApplyPage()),
+              GoRoute(path: 'team', builder: (_, __) => const TeamLeavePage()),
             ],
           ),
           GoRoute(path: '/profile', builder: (_, __) => const ProfilePage()),

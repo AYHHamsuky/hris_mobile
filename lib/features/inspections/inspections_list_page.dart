@@ -3,21 +3,49 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'inspection_drafts.dart';
 import 'inspection_models.dart';
 import 'inspection_repository.dart';
 
-class InspectionsListPage extends ConsumerWidget {
+class InspectionsListPage extends ConsumerStatefulWidget {
   const InspectionsListPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<InspectionsListPage> createState() => _InspectionsListPageState();
+}
+
+class _InspectionsListPageState extends ConsumerState<InspectionsListPage> {
+  bool _syncing = false;
+
+  Future<void> _syncDrafts() async {
+    setState(() => _syncing = true);
+    try {
+      final n = await ref.read(inspectionDraftStoreProvider).syncAll();
+      ref.invalidate(inspectionDraftsProvider);
+      ref.invalidate(inspectionsProvider);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(n == 0 ? 'No drafts to sync (or no internet).' : 'Synced $n draft(s).'),
+        ));
+      }
+    } finally {
+      if (mounted) setState(() => _syncing = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final inspections = ref.watch(inspectionsProvider);
+    final drafts = ref.watch(inspectionDraftsProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Field Inspections'),
         actions: [
-          IconButton(icon: const Icon(Icons.refresh), onPressed: () => ref.invalidate(inspectionsProvider)),
+          IconButton(icon: const Icon(Icons.refresh), onPressed: () {
+            ref.invalidate(inspectionsProvider);
+            ref.invalidate(inspectionDraftsProvider);
+          }),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -26,30 +54,71 @@ class InspectionsListPage extends ConsumerWidget {
         label: const Text('New'),
       ),
       body: RefreshIndicator(
-        onRefresh: () async => ref.invalidate(inspectionsProvider),
-        child: inspections.when(
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (e, _) => Center(child: Text(e.toString())),
-          data: (list) {
-            if (list.isEmpty) {
-              return ListView(
-                padding: const EdgeInsets.all(32),
-                children: const [
-                  Icon(Icons.location_searching, size: 56, color: Colors.black26),
-                  SizedBox(height: 12),
-                  Text('No inspections yet.', textAlign: TextAlign.center, style: TextStyle(color: Colors.black54)),
-                  SizedBox(height: 4),
-                  Text('Tap "New" to record your first site visit.', textAlign: TextAlign.center, style: TextStyle(color: Colors.black45, fontSize: 12)),
-                ],
-              );
-            }
-            return ListView.separated(
-              padding: const EdgeInsets.fromLTRB(12, 12, 12, 96),
-              itemCount: list.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 8),
-              itemBuilder: (_, i) => _InspectionCard(insp: list[i]),
-            );
-          },
+        onRefresh: () async {
+          ref.invalidate(inspectionsProvider);
+          ref.invalidate(inspectionDraftsProvider);
+        },
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(12, 12, 12, 96),
+          children: [
+            // Pending drafts banner
+            drafts.maybeWhen(
+              data: (list) => list.isEmpty
+                  ? const SizedBox.shrink()
+                  : Card(
+                      color: Colors.amber.shade50,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.cloud_upload, color: Colors.orange),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text('${list.length} draft(s) waiting to sync',
+                                  style: const TextStyle(fontWeight: FontWeight.w600)),
+                            ),
+                            FilledButton.tonal(
+                              onPressed: _syncing ? null : _syncDrafts,
+                              child: _syncing
+                                  ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                                  : const Text('Sync now'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+              orElse: () => const SizedBox.shrink(),
+            ),
+            const SizedBox(height: 8),
+            inspections.when(
+              loading: () => const Padding(padding: EdgeInsets.all(32), child: Center(child: CircularProgressIndicator())),
+              error: (e, _) => Padding(padding: const EdgeInsets.all(16), child: Text(e.toString())),
+              data: (list) {
+                if (list.isEmpty) {
+                  return Padding(
+                    padding: const EdgeInsets.all(32),
+                    child: Column(
+                      children: const [
+                        Icon(Icons.location_searching, size: 56, color: Colors.black26),
+                        SizedBox(height: 12),
+                        Text('No inspections yet.', textAlign: TextAlign.center, style: TextStyle(color: Colors.black54)),
+                        SizedBox(height: 4),
+                        Text('Tap "New" to record your first site visit.', textAlign: TextAlign.center, style: TextStyle(color: Colors.black45, fontSize: 12)),
+                      ],
+                    ),
+                  );
+                }
+                return Column(
+                  children: [
+                    for (final insp in list) ...[
+                      _InspectionCard(insp: insp),
+                      const SizedBox(height: 8),
+                    ],
+                  ],
+                );
+              },
+            ),
+          ],
         ),
       ),
     );
