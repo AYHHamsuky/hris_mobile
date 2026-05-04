@@ -49,6 +49,27 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^6.0.0
 
+  # Brand: launcher icon + splash generation (run via `dart run`).
+  flutter_launcher_icons: ^0.14.1
+  flutter_native_splash: ^2.4.3
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/branding/app_icon.png"
+  adaptive_icon_background: "#1F8B4C"
+  adaptive_icon_foreground: "assets/branding/app_icon.png"
+
+flutter_native_splash:
+  color: "#1F8B4C"
+  image: "assets/branding/splash_logo.png"
+  android_12:
+    color: "#1F8B4C"
+    image: "assets/branding/splash_logo.png"
+  ios_content_mode: center
+  fullscreen: false
+
 flutter:
   uses-material-design: true
   assets:

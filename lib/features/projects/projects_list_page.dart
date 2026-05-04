@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../core/api/api_client.dart';
 
@@ -55,6 +56,8 @@ class ProjectsListPage extends ConsumerWidget {
                   leading: CircleAvatar(child: Text(list[i].name[0].toUpperCase())),
                   title: Text(list[i].name, style: const TextStyle(fontWeight: FontWeight.w600)),
                   subtitle: Text('${list[i].tasksCount} task(s) · ${list[i].status ?? '—'}'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => context.push('/projects/${list[i].id}'),
                 ),
               ),
             );

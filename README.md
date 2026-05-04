@@ -19,6 +19,10 @@ Flutter app (iOS + Android) that talks to the Laravel HRIS backend at
 | Offline draft cache for inspections | ✅ shared_preferences-backed, auto-syncs |
 | Line manager Team Leave queue + LM approve/reject | ✅ |
 | Biometric unlock at app start | ✅ |
+| Project detail page (tasks grouped by Odoo state + milestones) | ✅ |
+| Task comments + attachments + progress slider on detail page | ✅ |
+| Branded launcher icon + native splash screen | ✅ |
+| GitHub Actions CI (analyze, test, build APK on tag) | ✅ |
 
 ## Architecture
 
@@ -117,9 +121,46 @@ notifications:
 If `FCM_SERVER_KEY` is unset on the backend or the config files are missing
 on the client, the app falls back to silent no-ops — nothing else breaks.
 
+## Releasing a signed Android build
+
+The CI workflow at `.github/workflows/ci.yml` already builds an unsigned
+release APK on every push to `main` and uploads it as a workflow artifact,
+plus attaches it to a GitHub Release whenever you push a tag like `v1.0.1`.
+
+To produce a *signed* APK suitable for the Play Store:
+
+1. Generate a keystore once and upload it as a GitHub secret:
+   ```
+   keytool -genkey -v -keystore release.keystore -alias hris -keyalg RSA -keysize 2048 -validity 10000
+   base64 -i release.keystore | pbcopy           # copy to clipboard
+   ```
+2. In GitHub → Settings → Secrets and variables → Actions, add:
+   - `ANDROID_KEYSTORE_BASE64` (the base64 blob)
+   - `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_PASSWORD`, `ANDROID_KEY_ALIAS`
+3. Update `android/app/build.gradle` with a signingConfig block that reads
+   from `android/key.properties` and adjust the workflow to write that file
+   from the secrets before `flutter build apk --release`.
+
+Until then, install the unsigned APK on test devices with:
+```bash
+adb install build/app/outputs/flutter-apk/app-release.apk
+```
+
+## Branding
+
+Launcher icon + splash are generated from `assets/branding/`:
+- `app_icon.png` (1024×1024) → all Android mipmap densities + iOS AppIcon
+- `splash_logo.png` (1024×1024) → Android 11/12+ splash, iOS LaunchImage
+
+Re-run after replacing the source PNGs:
+```bash
+dart run flutter_launcher_icons
+dart run flutter_native_splash:create
+```
+
 ## Roadmap
 
-- App icons + splash screen with brand assets
-- Signed Android release + iOS TestFlight build
-- Project detail screen with inline tasks
-- Subtask tree on the Task detail page
+- Signed APK pipeline (see above)
+- iOS TestFlight build (needs Apple Developer account)
+- Pull-to-refresh feedback unification
+- Localisation (en + Hausa)

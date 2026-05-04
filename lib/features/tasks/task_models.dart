@@ -64,6 +64,60 @@ class TaskAssignee {
   final String name;
 }
 
+/// Returned by GET /tasks/{id} — task plus comments + attachments + (eager) subtasks.
+class TaskDetail {
+  TaskDetail({required this.task, this.comments = const [], this.attachments = const []});
+  final Task task;
+  final List<TaskComment> comments;
+  final List<TaskAttachmentFile> attachments;
+
+  factory TaskDetail.fromJson(Map<String, dynamic> root) {
+    return TaskDetail(
+      task: Task.fromJson(root['data'] as Map<String, dynamic>),
+      comments: (root['comments'] as List? ?? const [])
+          .cast<Map<String, dynamic>>()
+          .map(TaskComment.fromJson)
+          .toList(),
+      attachments: (root['attachments'] as List? ?? const [])
+          .cast<Map<String, dynamic>>()
+          .map(TaskAttachmentFile.fromJson)
+          .toList(),
+    );
+  }
+}
+
+class TaskComment {
+  TaskComment({required this.id, required this.body, required this.userName, required this.createdAt});
+  final int id;
+  final String body;
+  final String userName;
+  final String createdAt;
+
+  factory TaskComment.fromJson(Map<String, dynamic> j) => TaskComment(
+        id: j['id'] as int,
+        body: j['body'] as String,
+        userName: (j['user'] as Map?)?['name'] as String? ?? 'Unknown',
+        createdAt: j['created_at'] as String? ?? '',
+      );
+}
+
+class TaskAttachmentFile {
+  TaskAttachmentFile({required this.id, required this.name, required this.url, this.mime, this.sizeBytes});
+  final int id;
+  final String name;
+  final String url;
+  final String? mime;
+  final int? sizeBytes;
+
+  factory TaskAttachmentFile.fromJson(Map<String, dynamic> j) => TaskAttachmentFile(
+        id: j['id'] as int,
+        name: j['name'] as String? ?? 'file',
+        url: j['url'] as String? ?? '',
+        mime: j['mime'] as String?,
+        sizeBytes: j['size_bytes'] as int?,
+      );
+}
+
 class TaskState {
   static const backlog = '04_waiting_normal';
   static const inProgress = '01_in_progress';

@@ -19,9 +19,9 @@ class TaskRepository {
     return data.map(Task.fromJson).toList();
   }
 
-  Future<Task> show(int id) async {
+  Future<TaskDetail> show(int id) async {
     final resp = await _api.dio.get('/tasks/$id');
-    return Task.fromJson(resp.data['data'] as Map<String, dynamic>);
+    return TaskDetail.fromJson(resp.data as Map<String, dynamic>);
   }
 
   Future<void> updateState(int id, String state) async {
