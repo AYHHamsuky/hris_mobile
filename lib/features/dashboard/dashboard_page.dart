@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/api/api_client.dart';
 import '../auth/auth_repository.dart';
+import '../notifications/notification_repository.dart';
 
 class DashboardData {
   DashboardData({
@@ -45,11 +46,44 @@ class DashboardPage extends ConsumerWidget {
     final data = ref.watch(dashboardProvider);
     final user = ref.watch(authControllerProvider).user;
 
+    final unreadAsync = ref.watch(unreadCountProvider);
+    final unread = unreadAsync.maybeWhen(data: (n) => n, orElse: () => 0);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
         actions: [
-          IconButton(icon: const Icon(Icons.refresh), onPressed: () => ref.invalidate(dashboardProvider)),
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.notifications_outlined),
+                onPressed: () => context.push('/notifications'),
+              ),
+              if (unread > 0)
+                Positioned(
+                  right: 6,
+                  top: 6,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                    constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
+                    child: Text(
+                      unread > 99 ? '99+' : '$unread',
+                      style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w700),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          IconButton(icon: const Icon(Icons.refresh), onPressed: () {
+            ref.invalidate(dashboardProvider);
+            ref.invalidate(unreadCountProvider);
+          }),
         ],
       ),
       body: RefreshIndicator(

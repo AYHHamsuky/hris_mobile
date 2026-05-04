@@ -23,6 +23,9 @@ Flutter app (iOS + Android) that talks to the Laravel HRIS backend at
 | Task comments + attachments + progress slider on detail page | ✅ |
 | Branded launcher icon + native splash screen | ✅ |
 | GitHub Actions CI (analyze, test, build APK on tag) | ✅ |
+| Notifications inbox + bell badge on Dashboard | ✅ |
+| Signed Android APK / Play Store .aab pipeline | ✅ (needs keystore secrets) |
+| iOS background-modes for push delivery | ✅ |
 
 ## Architecture
 

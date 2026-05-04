@@ -12,6 +12,7 @@ import '../features/inspections/inspections_list_page.dart';
 import '../features/leave/leave_apply_page.dart';
 import '../features/leave/leave_list_page.dart';
 import '../features/leave/team_leave_page.dart';
+import '../features/notifications/notifications_page.dart';
 import '../features/profile/profile_page.dart';
 import '../features/projects/project_detail_page.dart';
 import '../features/projects/projects_list_page.dart';
@@ -68,6 +69,7 @@ GoRouter buildRouter(WidgetRef ref) {
             ],
           ),
           GoRoute(path: '/profile', builder: (_, __) => const ProfilePage()),
+          GoRoute(path: '/notifications', builder: (_, __) => const NotificationsPage()),
           GoRoute(
             path: '/projects',
             builder: (_, __) => const ProjectsListPage(),
