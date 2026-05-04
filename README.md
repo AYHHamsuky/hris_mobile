@@ -26,6 +26,8 @@ Flutter app (iOS + Android) that talks to the Laravel HRIS backend at
 | Notifications inbox + bell badge on Dashboard | ✅ |
 | Signed Android APK / Play Store .aab pipeline | ✅ (needs keystore secrets) |
 | iOS background-modes for push delivery | ✅ |
+| Localisation: English + Hausa with in-app switcher | ✅ |
+| My Appraisals (read-only Performance Mgmt view) | ✅ |
 
 ## Architecture
 

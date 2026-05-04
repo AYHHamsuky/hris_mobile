@@ -5,10 +5,12 @@ import 'package:go_router/go_router.dart';
 
 import 'app/router.dart';
 import 'app/theme.dart';
+import 'core/locale/locale_controller.dart';
 import 'core/notifications/push_router.dart';
 import 'core/notifications/push_service.dart';
 import 'features/auth/auth_repository.dart';
 import 'features/inspections/inspection_drafts.dart';
+import 'l10n/generated/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,11 +53,15 @@ class _HrisAppState extends ConsumerState<HrisApp> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = ref.watch(localeControllerProvider);
     return MaterialApp.router(
       title: 'Kaduna Electric HRIS',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light(),
       routerConfig: _router,
+      locale: locale,
+      localizationsDelegates: AppL10n.localizationsDelegates,
+      supportedLocales: AppL10n.supportedLocales,
     );
   }
 }

@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/auth/biometric_service.dart';
+import '../../core/locale/locale_controller.dart';
 import '../../core/notifications/push_service.dart';
+import '../../l10n/generated/app_localizations.dart';
 import '../auth/auth_repository.dart';
 
 final _biometricEnabledProvider = FutureProvider<bool>((ref) async {
@@ -17,10 +19,12 @@ class ProfilePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(authControllerProvider).user;
     final biometricEnabled = ref.watch(_biometricEnabledProvider);
+    final locale = ref.watch(localeControllerProvider);
+    final l = AppL10n.of(context);
     if (user == null) return const Scaffold(body: Center(child: CircularProgressIndicator()));
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Profile')),
+      appBar: AppBar(title: Text(l.profileTitle)),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -47,17 +51,35 @@ class ProfilePage extends ConsumerWidget {
           Card(
             child: ListTile(
               leading: const Icon(Icons.lock_outline),
-              title: const Text('Change Password'),
+              title: Text(l.profileChangePassword),
               trailing: const Icon(Icons.chevron_right),
               onTap: () => context.push('/change-password'),
             ),
           ),
           const SizedBox(height: 8),
           Card(
+            child: ListTile(
+              leading: const Icon(Icons.language),
+              title: Text(l.profileLanguage),
+              subtitle: Text(_languageLabel(locale)),
+              trailing: PopupMenuButton<Locale?>(
+                initialValue: locale,
+                onSelected: (v) => ref.read(localeControllerProvider.notifier).set(v),
+                itemBuilder: (_) => const [
+                  PopupMenuItem(value: null, child: Text('System default')),
+                  PopupMenuItem(value: Locale('en'), child: Text('English')),
+                  PopupMenuItem(value: Locale('ha'), child: Text('Hausa')),
+                ],
+                icon: const Icon(Icons.expand_more),
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Card(
             child: SwitchListTile(
               secondary: const Icon(Icons.fingerprint),
-              title: const Text('Biometric unlock'),
-              subtitle: const Text('Use fingerprint or Face ID to open the app'),
+              title: Text(l.profileBiometric),
+              subtitle: Text(l.profileBiometricSub),
               value: biometricEnabled.maybeWhen(data: (v) => v, orElse: () => false),
               onChanged: (v) async {
                 final svc = ref.read(biometricServiceProvider);
@@ -84,7 +106,7 @@ class ProfilePage extends ConsumerWidget {
           Card(
             child: ListTile(
               leading: const Icon(Icons.logout, color: Colors.red),
-              title: const Text('Sign Out', style: TextStyle(color: Colors.red)),
+              title: Text(l.profileSignOut, style: const TextStyle(color: Colors.red)),
               onTap: () async {
                 // Best-effort: tell the server to forget this device's FCM token.
                 await ref.read(pushServiceProvider).deregister();
@@ -97,6 +119,15 @@ class ProfilePage extends ConsumerWidget {
       ),
     );
   }
+}
+
+String _languageLabel(Locale? locale) {
+  if (locale == null) return 'System default';
+  return switch (locale.languageCode) {
+    'en' => 'English',
+    'ha' => 'Hausa',
+    _ => locale.languageCode,
+  };
 }
 
 class _Tile extends StatelessWidget {

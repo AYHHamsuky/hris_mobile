@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../l10n/generated/app_localizations.dart';
 import 'task_models.dart';
 import 'task_repository.dart';
 
@@ -28,10 +29,11 @@ class _TasksListPageState extends ConsumerState<TasksListPage> {
   Widget build(BuildContext context) {
     final filter = TaskFilter(state: _state, priority: _priority, search: _search);
     final tasksAsync = ref.watch(tasksProvider(filter));
+    final l = AppL10n.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Tasks'),
+        title: Text(l.tasksTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -47,7 +49,7 @@ class _TasksListPageState extends ConsumerState<TasksListPage> {
             child: TextField(
               controller: _searchCtrl,
               decoration: InputDecoration(
-                hintText: 'Search tasks…',
+                hintText: l.tasksSearchHint,
                 prefixIcon: const Icon(Icons.search),
                 isDense: true,
                 suffixIcon: _search.isNotEmpty
@@ -70,7 +72,7 @@ class _TasksListPageState extends ConsumerState<TasksListPage> {
               padding: const EdgeInsets.symmetric(horizontal: 12),
               children: [
                 FilterChip(
-                  label: const Text('All states'),
+                  label: Text(l.tasksAllStates),
                   selected: _state == null,
                   onSelected: (_) => setState(() => _state = null),
                 ),
@@ -93,10 +95,10 @@ class _TasksListPageState extends ConsumerState<TasksListPage> {
               error: (e, _) => _ErrorView(message: e.toString(), onRetry: () => ref.invalidate(tasksProvider(filter))),
               data: (tasks) {
                 if (tasks.isEmpty) {
-                  return const Center(
+                  return Center(
                     child: Padding(
-                      padding: EdgeInsets.all(32),
-                      child: Text('No tasks match the current filter.', style: TextStyle(color: Colors.black54)),
+                      padding: const EdgeInsets.all(32),
+                      child: Text(l.tasksNoneMatch, style: const TextStyle(color: Colors.black54)),
                     ),
                   );
                 }

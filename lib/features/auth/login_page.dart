@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../app/theme.dart';
 import '../../core/notifications/push_service.dart';
+import '../../l10n/generated/app_localizations.dart';
 import '../inspections/inspection_drafts.dart';
 import 'auth_repository.dart';
 
@@ -46,6 +47,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final auth = ref.watch(authControllerProvider);
+    final l = AppL10n.of(context);
 
     return Scaffold(
       body: SafeArea(
@@ -75,20 +77,20 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 4),
-                  const Text(
-                    'HRIS Staff Companion',
-                    style: TextStyle(color: Colors.black54),
+                  Text(
+                    l.appTagline,
+                    style: const TextStyle(color: Colors.black54),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 40),
                   TextFormField(
                     controller: _identifier,
                     autofillHints: const [AutofillHints.username],
-                    decoration: const InputDecoration(
-                      labelText: 'Email or Payroll ID',
-                      prefixIcon: Icon(Icons.person_outline),
+                    decoration: InputDecoration(
+                      labelText: l.loginEmailOrPayroll,
+                      prefixIcon: const Icon(Icons.person_outline),
                     ),
-                    validator: (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
+                    validator: (v) => (v == null || v.trim().isEmpty) ? l.loginRequired : null,
                   ),
                   const SizedBox(height: 12),
                   TextFormField(
@@ -96,14 +98,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     obscureText: _obscure,
                     autofillHints: const [AutofillHints.password],
                     decoration: InputDecoration(
-                      labelText: 'Password',
+                      labelText: l.loginPassword,
                       prefixIcon: const Icon(Icons.lock_outline),
                       suffixIcon: IconButton(
                         icon: Icon(_obscure ? Icons.visibility : Icons.visibility_off),
                         onPressed: () => setState(() => _obscure = !_obscure),
                       ),
                     ),
-                    validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
+                    validator: (v) => (v == null || v.isEmpty) ? l.loginRequired : null,
                     onFieldSubmitted: (_) => _submit(),
                   ),
                   const SizedBox(height: 24),
@@ -126,12 +128,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         ? const SizedBox(
                             height: 20, width: 20,
                             child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                        : const Text('Sign in'),
+                        : Text(l.loginSignIn),
                   ),
                   const SizedBox(height: 24),
-                  const Text(
-                    'Use your work email or Payroll ID',
-                    style: TextStyle(color: Colors.black45, fontSize: 12),
+                  Text(
+                    l.loginHint,
+                    style: const TextStyle(color: Colors.black45, fontSize: 12),
                     textAlign: TextAlign.center,
                   ),
                 ],
