@@ -94,6 +94,12 @@ GoRouter buildRouter(WidgetRef ref) {
 
 class _AuthRefreshNotifier extends ChangeNotifier {
   _AuthRefreshNotifier(WidgetRef ref) {
-    ref.listen<AuthState>(authControllerProvider, (_, __) => notifyListeners());
+    // listenManual is the only ref.listen variant that's allowed outside of
+    // a build() callback. The plain ref.listen used here previously silently
+    // no-opped, so the router never re-evaluated its `redirect` callback
+    // after login — the user could enter valid credentials, the auth state
+    // would flip to "logged in", and the redirect would never fire because
+    // refreshListenable was never notified.
+    ref.listenManual<AuthState>(authControllerProvider, (_, __) => notifyListeners());
   }
 }
