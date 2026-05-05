@@ -311,4 +311,65 @@ class AppL10nEn extends AppL10n {
 
   @override
   String get loading => 'Loading…';
+
+  @override
+  String get navAppraisals => 'Appraisals';
+
+  @override
+  String get appraisalsTitle => 'My Appraisals';
+
+  @override
+  String get appraisalsEmpty => 'No appraisals assigned to you yet.';
+
+  @override
+  String get appraisalsObjectives => 'Objectives';
+
+  @override
+  String get appraisalsSelfAssessment => 'Self assessment';
+
+  @override
+  String get appraisalsReviewerComments => 'Reviewer comments';
+
+  @override
+  String get appraisalsHrRejectionReason => 'HR rejection reason';
+
+  @override
+  String get appraisalsWebOnlyNotice =>
+      'Editing, rating, and agreement actions are only available on the web. Sign in at kadunaelectric.cloud to act on this appraisal.';
+
+  @override
+  String get appraisalStatusPlanning => 'Planning';
+
+  @override
+  String get appraisalStatusPlanAgreed => 'Plan Agreed';
+
+  @override
+  String get appraisalStatusTracking => 'Mid-Year Tracking';
+
+  @override
+  String get appraisalStatusRating => 'Rating';
+
+  @override
+  String get appraisalStatusFinalized => 'Finalized';
+
+  @override
+  String get leaveSubmitted => 'Leave application submitted.';
+
+  @override
+  String get rejectionReason => 'Rejection reason';
+
+  @override
+  String get post => 'Post';
+
+  @override
+  String get addComment => 'Add Comment';
+
+  @override
+  String get languageSystem => 'System default';
+
+  @override
+  String get languageEnglish => 'English';
+
+  @override
+  String get languageHausa => 'Hausa';
 }

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/api/api_client.dart';
+import '../../l10n/generated/app_localizations.dart';
 import 'notification_repository.dart';
 
 class NotificationsPage extends ConsumerWidget {
@@ -25,13 +26,14 @@ class NotificationsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final result = ref.watch(notificationsProvider);
+    final l = AppL10n.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notifications'),
+        title: Text(l.notificationsTitle),
         actions: [
           IconButton(
-            tooltip: 'Mark all read',
+            tooltip: l.notificationsAllRead,
             icon: const Icon(Icons.done_all),
             onPressed: () async {
               try {
@@ -66,10 +68,10 @@ class NotificationsPage extends ConsumerWidget {
             if (res.items.isEmpty) {
               return ListView(
                 padding: const EdgeInsets.all(32),
-                children: const [
-                  Icon(Icons.notifications_none, size: 64, color: Colors.black26),
-                  SizedBox(height: 12),
-                  Text("You're all caught up.", textAlign: TextAlign.center, style: TextStyle(color: Colors.black54)),
+                children: [
+                  const Icon(Icons.notifications_none, size: 64, color: Colors.black26),
+                  const SizedBox(height: 12),
+                  Text(l.notificationsEmpty, textAlign: TextAlign.center, style: const TextStyle(color: Colors.black54)),
                 ],
               );
             }
@@ -105,6 +107,7 @@ class _NotificationTile extends StatelessWidget {
     if (item.type.startsWith('task.')) return Icons.task_alt;
     if (item.type.startsWith('leave.')) return Icons.calendar_month;
     if (item.type.startsWith('milestone.')) return Icons.flag_outlined;
+    if (item.type.startsWith('appraisal.')) return Icons.assignment_outlined;
     return Icons.notifications;
   }
 
@@ -112,6 +115,7 @@ class _NotificationTile extends StatelessWidget {
     if (item.type.startsWith('task.')) return Colors.blue;
     if (item.type.startsWith('leave.')) return Colors.green;
     if (item.type.startsWith('milestone.')) return Colors.purple;
+    if (item.type.startsWith('appraisal.')) return Colors.indigo;
     return Colors.grey;
   }
 

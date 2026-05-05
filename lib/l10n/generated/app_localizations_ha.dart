@@ -312,4 +312,65 @@ class AppL10nHa extends AppL10n {
 
   @override
   String get loading => 'Ana ɗaukar…';
+
+  @override
+  String get navAppraisals => 'Tantancewa';
+
+  @override
+  String get appraisalsTitle => 'Tantancewata';
+
+  @override
+  String get appraisalsEmpty => 'Babu tantancewa da aka ba ka tukuna.';
+
+  @override
+  String get appraisalsObjectives => 'Manufofin';
+
+  @override
+  String get appraisalsSelfAssessment => 'Tantancewar kai';
+
+  @override
+  String get appraisalsReviewerComments => 'Tsokaci na mai duba';
+
+  @override
+  String get appraisalsHrRejectionReason => 'Dalilin ƙin HR';
+
+  @override
+  String get appraisalsWebOnlyNotice =>
+      'Gyara, ba da maki, da yarda ana yi ne kawai a yanar gizo. Shiga a kadunaelectric.cloud.';
+
+  @override
+  String get appraisalStatusPlanning => 'Tsarawa';
+
+  @override
+  String get appraisalStatusPlanAgreed => 'An Yarda';
+
+  @override
+  String get appraisalStatusTracking => 'Tsakiyar Shekara';
+
+  @override
+  String get appraisalStatusRating => 'Bayar da Maki';
+
+  @override
+  String get appraisalStatusFinalized => 'An Gama';
+
+  @override
+  String get leaveSubmitted => 'An aika aikace-aikacen hutu.';
+
+  @override
+  String get rejectionReason => 'Dalilin ƙin amincewa';
+
+  @override
+  String get post => 'Aika';
+
+  @override
+  String get addComment => 'Ƙara Tsokaci';
+
+  @override
+  String get languageSystem => 'Tsoffin tsarin';
+
+  @override
+  String get languageEnglish => 'Turanci';
+
+  @override
+  String get languageHausa => 'Hausa';
 }

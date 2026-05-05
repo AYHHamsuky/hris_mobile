@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import 'app/router.dart';
 import 'app/theme.dart';
+import 'core/locale/formats.dart';
 import 'core/locale/locale_controller.dart';
 import 'core/notifications/push_router.dart';
 import 'core/notifications/push_service.dart';
@@ -14,6 +15,7 @@ import 'l10n/generated/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await AppFormats.init();
   // Initialise Firebase if a config file is present. The app continues to work
   // without it — push just no-ops.
   try {

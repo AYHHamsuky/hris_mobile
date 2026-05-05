@@ -61,14 +61,14 @@ class ProfilePage extends ConsumerWidget {
             child: ListTile(
               leading: const Icon(Icons.language),
               title: Text(l.profileLanguage),
-              subtitle: Text(_languageLabel(locale)),
+              subtitle: Text(_languageLabel(context, locale)),
               trailing: PopupMenuButton<Locale?>(
                 initialValue: locale,
                 onSelected: (v) => ref.read(localeControllerProvider.notifier).set(v),
-                itemBuilder: (_) => const [
-                  PopupMenuItem(value: null, child: Text('System default')),
-                  PopupMenuItem(value: Locale('en'), child: Text('English')),
-                  PopupMenuItem(value: Locale('ha'), child: Text('Hausa')),
+                itemBuilder: (_) => [
+                  PopupMenuItem(value: null, child: Text(l.languageSystem)),
+                  PopupMenuItem(value: const Locale('en'), child: Text(l.languageEnglish)),
+                  PopupMenuItem(value: const Locale('ha'), child: Text(l.languageHausa)),
                 ],
                 icon: const Icon(Icons.expand_more),
               ),
@@ -121,11 +121,12 @@ class ProfilePage extends ConsumerWidget {
   }
 }
 
-String _languageLabel(Locale? locale) {
-  if (locale == null) return 'System default';
+String _languageLabel(BuildContext context, Locale? locale) {
+  final l = AppL10n.of(context);
+  if (locale == null) return l.languageSystem;
   return switch (locale.languageCode) {
-    'en' => 'English',
-    'ha' => 'Hausa',
+    'en' => l.languageEnglish,
+    'ha' => l.languageHausa,
     _ => locale.languageCode,
   };
 }

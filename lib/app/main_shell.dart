@@ -8,7 +8,7 @@ class MainShell extends StatelessWidget {
   final Widget child;
   final String location;
 
-  static const _paths = ['/dashboard', '/tasks', '/inspections', '/leave', '/profile'];
+  static const _paths = ['/dashboard', '/tasks', '/inspections', '/leave', '/appraisals'];
 
   int _indexFor(String loc) {
     for (var i = 0; i < _paths.length; i++) {
@@ -26,7 +26,7 @@ class MainShell extends StatelessWidget {
       (Icons.task_alt_outlined, Icons.task_alt, l.navTasks),
       (Icons.location_on_outlined, Icons.location_on, l.navInspections),
       (Icons.calendar_month_outlined, Icons.calendar_month, l.navLeave),
-      (Icons.person_outline, Icons.person, l.navMe),
+      (Icons.assignment_outlined, Icons.assignment, l.navAppraisals),
     ];
 
     return Scaffold(

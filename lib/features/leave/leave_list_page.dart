@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../l10n/generated/app_localizations.dart';
 import 'leave_models.dart';
 import 'leave_repository.dart';
 
@@ -12,10 +13,11 @@ class LeaveListPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final balances = ref.watch(leaveBalancesProvider);
     final apps = ref.watch(myLeaveProvider);
+    final l = AppL10n.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Leave'),
+        title: Text(l.leaveTitle),
         actions: [
           IconButton(
             tooltip: 'Team requests',
@@ -34,7 +36,7 @@ class LeaveListPage extends ConsumerWidget {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => context.push('/leave/apply'),
         icon: const Icon(Icons.add),
-        label: const Text('Apply'),
+        label: Text(l.leaveApply),
       ),
       body: RefreshIndicator(
         onRefresh: () async {
@@ -44,7 +46,7 @@ class LeaveListPage extends ConsumerWidget {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(12, 12, 12, 80),
           children: [
-            const Text('Balances', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+            Text(l.leaveBalances, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
             const SizedBox(height: 8),
             balances.when(
               loading: () => const Padding(padding: EdgeInsets.all(16), child: LinearProgressIndicator()),
@@ -52,7 +54,7 @@ class LeaveListPage extends ConsumerWidget {
               data: (list) => Column(children: list.map(_BalanceTile.new).toList()),
             ),
             const SizedBox(height: 24),
-            const Text('My Applications', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+            Text(l.leaveMyApps, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
             const SizedBox(height: 8),
             apps.when(
               loading: () => const Padding(padding: EdgeInsets.all(16), child: LinearProgressIndicator()),

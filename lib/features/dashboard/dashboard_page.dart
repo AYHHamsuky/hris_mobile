@@ -84,6 +84,13 @@ class DashboardPage extends ConsumerWidget {
             ref.invalidate(dashboardProvider);
             ref.invalidate(unreadCountProvider);
           }),
+          IconButton(
+            tooltip: 'Profile',
+            icon: user?.photoUrl != null
+                ? CircleAvatar(radius: 14, backgroundImage: NetworkImage(user!.photoUrl!))
+                : const Icon(Icons.person_outline),
+            onPressed: () => context.push('/profile'),
+          ),
         ],
       ),
       body: RefreshIndicator(
@@ -145,14 +152,6 @@ class DashboardPage extends ConsumerWidget {
                         icon: Icons.location_on_outlined,
                         color: Colors.orange,
                         onTap: () => context.go('/inspections'),
-                      ),
-                      _StatCard(
-                        title: 'My Appraisals',
-                        value: 'View',
-                        sub: 'Performance reviews & scores',
-                        icon: Icons.assignment_outlined,
-                        color: Colors.indigo,
-                        onTap: () => context.push('/appraisals'),
                       ),
                     ],
                   ),

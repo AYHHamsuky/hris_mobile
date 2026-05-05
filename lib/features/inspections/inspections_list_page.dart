@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../l10n/generated/app_localizations.dart';
 import 'inspection_drafts.dart';
 import 'inspection_models.dart';
 import 'inspection_repository.dart';
@@ -37,10 +38,11 @@ class _InspectionsListPageState extends ConsumerState<InspectionsListPage> {
   Widget build(BuildContext context) {
     final inspections = ref.watch(inspectionsProvider);
     final drafts = ref.watch(inspectionDraftsProvider);
+    final l = AppL10n.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Field Inspections'),
+        title: Text(l.inspectionsTitle),
         actions: [
           IconButton(icon: const Icon(Icons.refresh), onPressed: () {
             ref.invalidate(inspectionsProvider);
@@ -51,7 +53,7 @@ class _InspectionsListPageState extends ConsumerState<InspectionsListPage> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => context.push('/inspections/new'),
         icon: const Icon(Icons.add_location_alt),
-        label: const Text('New'),
+        label: Text(l.inspectionsNew),
       ),
       body: RefreshIndicator(
         onRefresh: () async {
@@ -74,14 +76,14 @@ class _InspectionsListPageState extends ConsumerState<InspectionsListPage> {
                             const Icon(Icons.cloud_upload, color: Colors.orange),
                             const SizedBox(width: 8),
                             Expanded(
-                              child: Text('${list.length} draft(s) waiting to sync',
+                              child: Text(l.inspectionDraftCount(list.length),
                                   style: const TextStyle(fontWeight: FontWeight.w600)),
                             ),
                             FilledButton.tonal(
                               onPressed: _syncing ? null : _syncDrafts,
                               child: _syncing
                                   ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
-                                  : const Text('Sync now'),
+                                  : Text(l.inspectionSyncNow),
                             ),
                           ],
                         ),
@@ -98,12 +100,12 @@ class _InspectionsListPageState extends ConsumerState<InspectionsListPage> {
                   return Padding(
                     padding: const EdgeInsets.all(32),
                     child: Column(
-                      children: const [
-                        Icon(Icons.location_searching, size: 56, color: Colors.black26),
-                        SizedBox(height: 12),
-                        Text('No inspections yet.', textAlign: TextAlign.center, style: TextStyle(color: Colors.black54)),
-                        SizedBox(height: 4),
-                        Text('Tap "New" to record your first site visit.', textAlign: TextAlign.center, style: TextStyle(color: Colors.black45, fontSize: 12)),
+                      children: [
+                        const Icon(Icons.location_searching, size: 56, color: Colors.black26),
+                        const SizedBox(height: 12),
+                        Text(l.inspectionsEmpty, textAlign: TextAlign.center, style: const TextStyle(color: Colors.black54)),
+                        const SizedBox(height: 4),
+                        Text(l.inspectionsEmptyHint, textAlign: TextAlign.center, style: const TextStyle(color: Colors.black45, fontSize: 12)),
                       ],
                     ),
                   );

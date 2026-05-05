@@ -666,6 +666,126 @@ abstract class AppL10n {
   /// In en, this message translates to:
   /// **'Loading…'**
   String get loading;
+
+  /// No description provided for @navAppraisals.
+  ///
+  /// In en, this message translates to:
+  /// **'Appraisals'**
+  String get navAppraisals;
+
+  /// No description provided for @appraisalsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My Appraisals'**
+  String get appraisalsTitle;
+
+  /// No description provided for @appraisalsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No appraisals assigned to you yet.'**
+  String get appraisalsEmpty;
+
+  /// No description provided for @appraisalsObjectives.
+  ///
+  /// In en, this message translates to:
+  /// **'Objectives'**
+  String get appraisalsObjectives;
+
+  /// No description provided for @appraisalsSelfAssessment.
+  ///
+  /// In en, this message translates to:
+  /// **'Self assessment'**
+  String get appraisalsSelfAssessment;
+
+  /// No description provided for @appraisalsReviewerComments.
+  ///
+  /// In en, this message translates to:
+  /// **'Reviewer comments'**
+  String get appraisalsReviewerComments;
+
+  /// No description provided for @appraisalsHrRejectionReason.
+  ///
+  /// In en, this message translates to:
+  /// **'HR rejection reason'**
+  String get appraisalsHrRejectionReason;
+
+  /// No description provided for @appraisalsWebOnlyNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'Editing, rating, and agreement actions are only available on the web. Sign in at kadunaelectric.cloud to act on this appraisal.'**
+  String get appraisalsWebOnlyNotice;
+
+  /// No description provided for @appraisalStatusPlanning.
+  ///
+  /// In en, this message translates to:
+  /// **'Planning'**
+  String get appraisalStatusPlanning;
+
+  /// No description provided for @appraisalStatusPlanAgreed.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan Agreed'**
+  String get appraisalStatusPlanAgreed;
+
+  /// No description provided for @appraisalStatusTracking.
+  ///
+  /// In en, this message translates to:
+  /// **'Mid-Year Tracking'**
+  String get appraisalStatusTracking;
+
+  /// No description provided for @appraisalStatusRating.
+  ///
+  /// In en, this message translates to:
+  /// **'Rating'**
+  String get appraisalStatusRating;
+
+  /// No description provided for @appraisalStatusFinalized.
+  ///
+  /// In en, this message translates to:
+  /// **'Finalized'**
+  String get appraisalStatusFinalized;
+
+  /// No description provided for @leaveSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave application submitted.'**
+  String get leaveSubmitted;
+
+  /// No description provided for @rejectionReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejection reason'**
+  String get rejectionReason;
+
+  /// No description provided for @post.
+  ///
+  /// In en, this message translates to:
+  /// **'Post'**
+  String get post;
+
+  /// No description provided for @addComment.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Comment'**
+  String get addComment;
+
+  /// No description provided for @languageSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'System default'**
+  String get languageSystem;
+
+  /// No description provided for @languageEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get languageEnglish;
+
+  /// No description provided for @languageHausa.
+  ///
+  /// In en, this message translates to:
+  /// **'Hausa'**
+  String get languageHausa;
 }
 
 class _AppL10nDelegate extends LocalizationsDelegate<AppL10n> {

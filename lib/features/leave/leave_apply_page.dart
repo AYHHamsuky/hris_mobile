@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/api/api_client.dart';
+import '../../core/locale/formats.dart';
+import '../../l10n/generated/app_localizations.dart';
 import 'leave_models.dart';
 import 'leave_repository.dart';
 
@@ -152,11 +154,12 @@ class _DatePickerField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppL10n.of(context);
     return InkWell(
       onTap: onTap,
       child: InputDecorator(
         decoration: InputDecoration(labelText: label, suffixIcon: const Icon(Icons.calendar_today, size: 18)),
-        child: Text(value == null ? 'Choose…' : DateFormat('d MMM yyyy').format(value!)),
+        child: Text(value == null ? l.leaveChooseDate : AppFormats.date(value, context)),
       ),
     );
   }

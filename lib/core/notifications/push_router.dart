@@ -24,6 +24,11 @@ String? deepLinkFor(RemoteMessage msg) {
     case 'milestone.completed':
       final pid = data['project_id']?.toString();
       return pid != null ? '/projects/$pid' : '/dashboard';
+    case 'appraisal.approved':
+    case 'appraisal.rejected':
+    case 'appraisal.updated':
+      final id = data['review_id']?.toString();
+      return id != null ? '/appraisals/$id' : '/appraisals';
     default:
       return '/notifications';
   }

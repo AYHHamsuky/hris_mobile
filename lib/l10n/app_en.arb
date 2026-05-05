@@ -114,5 +114,29 @@
   "save": "Save",
   "tryAgain": "Try again",
   "retry": "Retry",
-  "loading": "Loading…"
+  "loading": "Loading…",
+
+  "navAppraisals": "Appraisals",
+  "appraisalsTitle": "My Appraisals",
+  "appraisalsEmpty": "No appraisals assigned to you yet.",
+  "appraisalsObjectives": "Objectives",
+  "appraisalsSelfAssessment": "Self assessment",
+  "appraisalsReviewerComments": "Reviewer comments",
+  "appraisalsHrRejectionReason": "HR rejection reason",
+  "appraisalsWebOnlyNotice": "Editing, rating, and agreement actions are only available on the web. Sign in at kadunaelectric.cloud to act on this appraisal.",
+
+  "appraisalStatusPlanning": "Planning",
+  "appraisalStatusPlanAgreed": "Plan Agreed",
+  "appraisalStatusTracking": "Mid-Year Tracking",
+  "appraisalStatusRating": "Rating",
+  "appraisalStatusFinalized": "Finalized",
+
+  "leaveSubmitted": "Leave application submitted.",
+  "rejectionReason": "Rejection reason",
+  "post": "Post",
+  "addComment": "Add Comment",
+
+  "languageSystem": "System default",
+  "languageEnglish": "English",
+  "languageHausa": "Hausa"
 }

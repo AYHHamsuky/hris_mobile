@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/api/api_client.dart';
+import '../../l10n/generated/app_localizations.dart';
 import 'leave_repository.dart';
 
 class TeamLeavePage extends ConsumerStatefulWidget {
@@ -72,10 +73,11 @@ class _TeamLeavePageState extends ConsumerState<TeamLeavePage> {
   @override
   Widget build(BuildContext context) {
     final items = ref.watch(teamLeaveProvider);
+    final l = AppL10n.of(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Team Leave'),
+        title: Text(l.teamLeaveTitle),
         actions: [
           IconButton(icon: const Icon(Icons.refresh), onPressed: () => ref.invalidate(teamLeaveProvider)),
         ],
@@ -89,10 +91,10 @@ class _TeamLeavePageState extends ConsumerState<TeamLeavePage> {
             if (list.isEmpty) {
               return ListView(
                 padding: const EdgeInsets.all(32),
-                children: const [
-                  Icon(Icons.inbox, size: 56, color: Colors.black26),
-                  SizedBox(height: 12),
-                  Text('No pending leave from your team.', textAlign: TextAlign.center, style: TextStyle(color: Colors.black54)),
+                children: [
+                  const Icon(Icons.inbox, size: 56, color: Colors.black26),
+                  const SizedBox(height: 12),
+                  Text(l.teamLeaveEmpty, textAlign: TextAlign.center, style: const TextStyle(color: Colors.black54)),
                 ],
               );
             }
