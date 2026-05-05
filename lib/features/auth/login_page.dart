@@ -60,23 +60,22 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const SizedBox(height: 40),
-                  Container(
-                    height: 64,
-                    width: 64,
-                    decoration: BoxDecoration(
-                      color: AppTheme.primary,
-                      borderRadius: BorderRadius.circular(16),
+                  Image.asset(
+                    'assets/branding/logo.png',
+                    height: 80,
+                    fit: BoxFit.contain,
+                    errorBuilder: (_, __, ___) => Container(
+                      height: 64,
+                      width: 64,
+                      decoration: BoxDecoration(
+                        color: AppTheme.primary,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      alignment: Alignment.center,
+                      child: const Icon(Icons.bolt, color: Colors.white, size: 36),
                     ),
-                    alignment: Alignment.center,
-                    child: const Icon(Icons.bolt, color: Colors.white, size: 36),
                   ),
                   const SizedBox(height: 16),
-                  const Text(
-                    'Kaduna Electric',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 4),
                   Text(
                     l.appTagline,
                     style: const TextStyle(color: Colors.black54),

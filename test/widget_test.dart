@@ -18,7 +18,9 @@ void main() {
     );
     await tester.pump();
 
-    expect(find.text('Kaduna Electric'), findsOneWidget);
+    // Smoke check: page builds and the localised Sign in button is present.
+    // The brand wordmark is now an Image.asset (logo.png), which the widget
+    // test bundle won't actually load — so we don't assert on it.
     expect(find.text('Sign in'), findsOneWidget);
   });
 }
